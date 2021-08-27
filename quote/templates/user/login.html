@@ -1,0 +1,54 @@
+{% extends "/user/base.html" %} {% block title %} Sign in {% endblock %} {% block content %}
+
+    <div class="wrapper">
+        <div class="inner">
+            <div class="image-holder">
+                <img src="static/images/login.png" alt="login">
+                <div style="display:flex;justify-content:center;">
+                    <span> No account? <a href="{{ url_for('blog.register') }}"> Sign up </a></span>
+                </div>
+            </div>
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('blog.login') }}">
+
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alert alert-danger" role="alert" id="alert_msg">
+                            <h6>{{ messages[0][1] }}</h6>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <h3></h3>
+
+                <div class="form-wrapper">
+                    <label>
+                        <input type="text" name="user_name" minlength="4" maxlength="50" required
+                               placeholder="Username"
+                               class="form-control">
+                    </label>
+                    <i class="zmdi zmdi-account"></i>
+                </div>
+
+
+                <div class="form-wrapper">
+                    <label>
+                        <input type="password" minlength="8" maxlength="50" required placeholder="Password"
+                               name="password"
+                               class="form-control">
+                    </label>
+                    <i class="zmdi zmdi-lock"></i>
+                </div>
+
+
+                <button>Sign in
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/user.js') }}"></script>
+{% endblock %}

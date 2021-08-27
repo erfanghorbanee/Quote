@@ -1,0 +1,107 @@
+{% extends "/user/base.html" %} {% block title %} Profile {% endblock %} {% block content %}
+
+    <div class="wrapper">
+        <div class="inner">
+            <div class="image-holder">
+                <img src="{{ url_for('static', filename='images/change_password.png') }}" alt="Change password">
+                <div style="display:flex;justify-content:center;">
+                    <a href="{{ url_for('blog.home') }}"> Home </a>
+                </div>
+            </div>
+            <form method="POST" enctype="multipart/form-data"
+                  action="{{ url_for('user.change_password') }}">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'error' %}
+                                <div class="alert alert-danger" role="alert" id="alert_msg">
+                                    <h6>{{ messages[0][1] }}</h6>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success" role="alert" id="alert_msg">
+                                    <h6>{{ messages[0][1] }}</h6>
+                                </div>
+
+
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="form-wrapper profile">
+
+
+                    <img src="{{ url_for('static', filename='images/profile_images/' + user.image) }}"
+                         alt="{{ user.first_name }}"
+                         style="border-radius: 50%;height:110px;width:110px;"/>
+
+                </div>
+
+
+                <h3>Hello {{ user.first_name }}</h3>
+                <div class="form-group profile">
+
+                    <h6><span class="profile_span">Full name:</span></h6> <h6 style="margin-left:40%;">
+                    {{ user.first_name }}{{ user.last_name }} </h6>
+                    <hr>
+
+                </div>
+
+                <div class="form-wrapper profile">
+
+                    <h6><span class="profile_span"> Username:</span></h6> <h6
+                        style="margin-left:60%;"> {{ user.user_name }} </h6>
+                    <hr>
+                    <i class="zmdi zmdi-account"></i>
+
+                </div>
+
+                <div class="form-wrapper profile">
+
+                    <h6><span class="profile_span"> Email:</span></h6> <h6
+                        style="margin-left:7%;">{{ user.email }}</h6>
+                    <i class="zmdi zmdi-email"></i>
+                    <hr>
+
+                </div>
+
+                <div class="form-wrapper profile">
+
+                    <h6><span class="profile_span">Phone number:</span></h6> <h6
+                        style="margin-left:35%;">{{ user.phone_number }}</h6>
+                    <hr>
+                    <i class="zmdi zmdi-account"></i>
+
+                </div>
+
+                <div class="form-wrapper">
+                    <label>
+                        <input type="password" required name="old_password"
+                               minlength="8" maxlength="50" placeholder="Old password" class="form-control"
+
+                        >
+                    </label>
+                    <i class="zmdi zmdi-lock"></i>
+                </div>
+
+                <div class="form-wrapper">
+                    <label>
+                        <input type="password" required name="password"
+                               minlength="8" maxlength="50" placeholder="New password" class="form-control">
+                    </label>
+                    <i class="zmdi zmdi-lock"></i>
+                </div>
+
+
+                <button style="margin-top:0">Change password
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </button>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/user.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet"> {# Shanam#}
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v[X.Y.Z]/dist/font-face.css" rel="stylesheet" type="text/css" />
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Bootstrap cdn-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!--JQuery cdn-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/blog.css') }}">
+
+    <!--Shabnam font-->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css" rel="stylesheet" type="text/css" />
+
+
+    <title>{{ post.title }}</title>
+
+
+</head>
+
+
+<body cz-shortcut-listen="true">
+
+    {#Navbar#}
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand text-light" id="brand" href="{{ url_for('blog.home') }}">Quote</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+
+                        {% for category in categories %} {% for key,value in category.items() %} {% if key == 'parent' %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link link-light dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ value }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% for each in category['children'] %}
+                                <li><a class="dropdown-item" href="{{ url_for( 'blog.category', category_name = each ) }} ">{{ each }}</a>
+                                </li> {% endfor %}
+                            </ul>
+                        </li>
+                        {% endif %}{% endfor %}{% endfor %}
+
+                    </ul>
+
+
+
+
+                    {% if user %}
+                    <div class="dropdown">
+                        <a class="btn  dropdown" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img class="Avatar " alt="Avatar " src="{{ url_for('static', filename='images/profile_images/' + user.get('profile_image')) }}">
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li>
+                                <p class="dropdown-header ">Signed in as <b>{{ user.get('first_name') }}</b></p>
+                            </li>
+                            <li><a class="dropdown-item " href="{{ url_for( 'user.posts_list') }} ">Dashboard</a></li>
+                            <li><a class="dropdown-item " href="{{ url_for( 'user.profile') }} ">Profile</a></li>
+                            <li><a class="dropdown-item " href="{{ url_for( 'user.create_post') }}">Write</a></li>
+                            <li>
+                                <hr class="dropdown-divider ">
+                            </li>
+                            <li><a class="dropdown-item text-danger " href="{{ url_for( 'blog.logout') }} ">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {% else %}
+
+                    <div class="butts d-grid gap-2 d-md-block">
+                        <a href="{{ url_for( 'blog.login') }} ">
+                            <button type="submit " class="btn btn-sm btn-outline-secondary signin">Sign in</button>
+                        </a>
+
+                        <a href="{{ url_for( 'blog.register') }} ">
+                            <button type="submit " class="btn btn-sm btn-outline-secondary ">Sign up</button>
+                        </a>
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+        </nav>
+
+    </div>
+
+
+
+    {% if user %} {% if language == 'fa' %} {#Page content#}
+    <div class="container-fluid" style="direction: rtl;font-family: 'Shabnam', sans-serif;
+">
+        {# Post Title#}
+        <div class="row">
+            <div class="col-12 post_cols">
+                <h1 id="title"> {{ post.title | title }} </h1>
+            </div>
+        </div>
+
+        {# Post author#}
+        <div class="row post_author" style="direction: ltr">
+
+            <div class="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1 ">
+
+                <img id="post_author_image" src="{{ url_for('static', filename='images/profile_images/' + post.author.image) }}" alt="{{ post.author.first_name }} " />
+            </div>
+            <div class="col-xxl-2 col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6 ">
+
+                <h4>{{ post.author.first_name | capitalize }}{{ post.author.last_name }} </h4>
+
+                <div class="col-xxl-12 col-xl-12 col-lg-3 col-lg-12 col-md-6 col-sm-6 col-12">
+                    <p>{{ reading_time }} min read</p>
+
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <p> {{ post.pub_date.strftime('%Y-%m-%d') }} </p>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {# Post Image#}
+        <div class="row">
+            <div class="col-12 post_cols post-image-col">
+                <img id="post_image" src="{{ url_for('static', filename='images/posts_images/' + post.image) }}" alt="Post Image">
+            </div>
+        </div>
+
+        {# Post Content#}
+        <div class="row post_cols">
+            <div class="col-8">
+
+                {% set content=post.content.split('\n') %} {% for line in content %}
+                <p id="lines">
+                    {{ line | safe }}
+                </p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+
+        {# Tags#}
+        <div class="row" id="tag-like-row">
+
+            <div class="col-12 col-sm-4" id="tags">
+                {% for tag in post.tags %}
+                <span class="badge rounded-pill bg-dark"><a href="{{ url_for( 'blog.post_by_tags', tag_name=tag.name) }}">{{ tag.name }}</a></span> {% endfor %}
+            </div>
+
+            {# Like#}
+            <div class="col-12 col-sm-4" id="likes">
+
+                <p id="likeCounter" class="like-counter"> آیا این پست را دوست داشتید؟ </p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill like" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
+                    </svg>
+
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class=" comment-col col-12 ">
+                <form method="POST" id="commentForm" enctype="multipart/form-data">
+                    <label for="comment" style="margin-top: 3%">
+                        </label><strong>نظر خود را بنویسید</strong> <textarea id="comment" name="comment" rows="5" cols="50" maxlength="250">
+
+                    </textarea> {# For sending with ajax #}
+                    <p hidden id="postId">{{ post.id }}</p>
+                    <p hidden id="userId">{{ user.user_id }}</p>
+                    <p hidden id="userFirstName">{{ user.first_name }}</p>
+
+
+                </form>
+                <button id="comment-btn" type="button" class="btn btn-dark">ارسال نظر</button>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    {# Comments#}
+    <div class="row post_cols" id="comment-row">
+        {% for comment in post.comments %}
+        <div class="col-8 " id="comment-col" style="border-bottom: 5px solid #797979;border-top: 5px solid #797979;margin-top: 25px;">
+            <h4> {{ comment.owner.first_name }} </h4>
+            <p> {{ comment.text }} </p>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    </div>
+
+
+
+
+    {# If language not fa and user is in site#} {% else %} {#Page content#}
+    <div class="container-fluid">
+        {# Post Title#}
+        <div class="row">
+            <div class="col-12 post_cols">
+                <h1 id="title"> {{ post.title | title }} </h1>
+            </div>
+        </div>
+
+        {# Post author#}
+        <div class="row post_author">
+
+            <div class="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1 ">
+
+                <img id="post_author_image" src="{{ url_for('static', filename='images/profile_images/' + post.author.image) }}" alt="{{ post.author.first_name }}" />
+            </div>
+            <div class="col-xxl-2 col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6 ">
+
+                <h4>{{ post.author.first_name | capitalize }}{{ post.author.last_name }} </h4>
+
+                <div class="col-xxl-12 col-xl-12 col-lg-3 col-lg-12 col-md-6 col-sm-6 col-12">
+                    <p>{{ reading_time }} min read</p>
+
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <p> {{ post.pub_date.strftime('%Y-%m-%d') }} </p>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {# Post Image#}
+        <div class="row">
+            <div class="col-12 post_cols post-image-col">
+                <img id="post_image" src="{{ url_for('static', filename='images/posts_images/' + post.image) }}" alt="Post Image">
+            </div>
+        </div>
+
+        {# Post Content#}
+        <div class="row post_cols ">
+            <div class="col-8">
+
+                {% set content=post.content.split('\n') %} {% for line in content %}
+                <p id="lines">
+                    {{ line | safe }}
+                </p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        {# Tags#}
+        <div class="row" id="tag-like-row">
+
+            <div class="col-12 col-sm-4" id="tags">
+                {% for tag in post.tags %}
+                <span class="badge rounded-pill bg-dark"><a href="{{ url_for( 'blog.post_by_tags', tag_name=tag.name) }}">{{ tag.name }}</a></span> {% endfor %}
+            </div>
+
+            {# Like#}
+            <div class="col-12 col-sm-4" id="likes">
+
+                <p id="likeCounter" class="like-counter"> Do you like this post? </p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill like" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
+                    </svg>
+
+
+            </div>
+        </div>
+
+
+        {#Comment area#}
+        <div class="row">
+            <div class=" comment-col col-12 ">
+                <form method="POST" id="commentForm" enctype="multipart/form-data">
+                    <label for="comment" style="margin-top: 3%">
+                        </label><strong>Share your opinion with us:</strong> <textarea id="comment" name="comment" rows="5" cols="50" maxlength="250">
+
+                    </textarea> {# For sending with ajax #}
+                    <p hidden id="postId">{{ post.id }}</p>
+                    <p hidden id="userId">{{ user.user_id }}</p>
+                    <p hidden id="userFirstName">{{ user.first_name }}</p>
+
+
+                </form>
+                <button id="comment-btn" type="button" class="btn btn-dark">Send</button>
+
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+        <div class="alert alert-danger" role="alert" id="alert_msg">
+            <h6>{{ messages[0][1] }}</h6>
+        </div>
+        {% endif %} {% endwith %} {# Comments#}
+        <div class="row post_cols" id="comment-row">
+            {% for comment in post.comments %}
+            <div class="col-8 " id="comment-col" style="border-bottom: 5px solid #797979;border-top: 5px solid #797979;margin-top: 25px;">
+                <h4>{{ comment.owner.first_name }}</h4>
+                <p> {{ comment.text }} </p>
+            </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+    {% endif %} {# If user not logged in #} {% else %} {% if language == 'fa' %} {#Page content#}
+    <div class="container-fluid" style="direction: rtl;font-family: 'Shabnam', sans-serif;
+">
+        {# Post Title#}
+        <div class="row">
+            <div class="col-12 post_cols">
+                <h1 id="title"> {{ post.title | title }} </h1>
+            </div>
+        </div>
+
+        {# Post author#}
+        <div class="row post_author" style="direction: ltr">
+
+            <div class="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1 ">
+
+                <img id="post_author_image" src="{{ url_for('static', filename='images/profile_images/' + post.author.image) }}" alt="{{ post.author.first_name }} " />
+            </div>
+            <div class="col-xxl-2 col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6 ">
+
+                <h4>{{ post.author.first_name | capitalize }}{{ post.author.last_name }} </h4>
+
+                <div class="col-xxl-12 col-xl-12 col-lg-3 col-lg-12 col-md-6 col-sm-6 col-12">
+                    <p>{{ reading_time }} min read</p>
+
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <p> {{ post.pub_date.strftime('%Y-%m-%d') }} </p>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {# Post Image#}
+        <div class="row">
+            <div class="col-12 post_cols post-image-col">
+                <img id="post_image" src="{{ url_for('static', filename='images/posts_images/' + post.image) }}" alt="Post Image">
+            </div>
+        </div>
+
+        {# Post Content#}
+        <div class="row post_cols">
+            <div class="col-8">
+
+                {% set content=post.content.split('\n') %} {% for line in content %}
+                <p id="lines">
+                    {{ line | safe }}
+                </p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="row" id="tag-like-row">
+
+            <div class="col-12 col-sm-4" id="tags">
+                {% for tag in post.tags %}
+                <span class="badge rounded-pill bg-dark"><a href="{{ url_for( 'blog.post_by_tags', tag_name=tag.name) }}">{{ tag.name }}</a></span> {% endfor %}
+            </div>
+
+            <div class="col-12 col-sm-4" id="likes">
+
+                تعداد لایک ها {{ post.likes | length }}
+
+
+            </div>
+        </div>
+
+        <div class="row post_cols">
+
+            <div class="col-8 ">
+                <h6>نظرات :</h6>
+
+            </div>
+        </div>
+
+
+        {# Comments#}
+        <div class="row post_cols" id="comment-row">
+            {% for comment in post.comments %}
+            <div class="col-8 " id="comment-col" style="border-bottom: 5px solid #797979;border-top: 5px solid #797979;margin-top: 25px;">
+                <h4> {{ comment.owner.first_name }} </h4>
+                <p> {{ comment.text }} </p>
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {# If language not fa and user not logged in #} {% else %} {#Page content#}
+    <div class="container-fluid">
+        {# Post Title#}
+        <div class="row">
+            <div class="col-12 post_cols">
+                <h1 id="title"> {{ post.title | title }} </h1>
+            </div>
+        </div>
+
+        {# Post author#}
+        <div class="row post_author">
+
+            <div class="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1 ">
+
+                <img id="post_author_image" src="{{ url_for('static', filename='images/profile_images/' + post.author.image) }}" alt="{{ post.author.first_name }}" />
+            </div>
+            <div class="col-xxl-2 col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6 ">
+
+                <h4>{{ post.author.first_name | capitalize }}{{ post.author.last_name }} </h4>
+
+                <div class="col-xxl-12 col-xl-12 col-lg-3 col-lg-12 col-md-6 col-sm-6 col-12">
+                    <p>{{ reading_time }} min read</p>
+
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <p> {{ post.pub_date.strftime('%Y-%m-%d') }} </p>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {# Post Image#}
+        <div class="row">
+            <div class="col-12 post_cols post-image-col">
+                <img id="post_image" src="{{ url_for('static', filename='images/posts_images/' + post.image) }}" alt="Post Image">
+            </div>
+        </div>
+
+        {# Post Content#}
+        <div class="row post_cols ">
+            <div class="col-8">
+
+                {% set content=post.content.split('\n') %} {% for line in content %}
+                <p id="lines">
+                    {{ line | safe }}
+                </p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        {# Tags#}
+        <div class="row" id="tag-like-row">
+
+            <div class="col-12 col-sm-4" id="tags">
+                {% for tag in post.tags %}
+                <span class="badge rounded-pill bg-dark"><a href="{{ url_for( 'blog.post_by_tags', tag_name=tag.name) }}">{{ tag.name }}</a></span> {% endfor %}
+            </div>
+
+
+            {# Like#}
+            <div class="col-12 col-sm-4" id="likes">
+
+
+                Likes {{ post.likes | length }}
+
+            </div>
+        </div>
+
+
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+        <div class="alert alert-danger" role="alert" id="alert_msg">
+            <h6>{{ messages[0][1] }}</h6>
+        </div>
+        {% endif %} {% endwith %}
+
+        <div class="row post_cols">
+
+            <div class="col-8 ">
+                <h6>Comments: </h6>
+
+            </div>
+        </div>
+
+        {# Comments#}
+        <div class="row post_cols" id="comment-row">
+            {% for comment in post.comments %}
+            <div class="col-8 " id="comment-col" style="border-bottom: 5px solid #797979;border-top: 5px solid #797979;margin-top: 25px;">
+                {# <img id="commentOwnerImage" src="{{ url_for('static', filename='images/profile_images/' + comment.owner.image) }}" #} {# alt="{{ comment.owner.first_name }}'s avatar" />#}
+                <h4>{{ comment.owner.first_name }}</h4>
+                <p> {{ comment.created_date.strftime('%Y-%m-%d') }} </p>
+                <p> {{ comment.text }} </p>
+            </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+    {% endif %} {% endif %}
+
+    <script src="{{ url_for('static', filename='js/blog.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

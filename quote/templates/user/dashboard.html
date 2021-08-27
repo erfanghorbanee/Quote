@@ -1,0 +1,106 @@
+{% extends "/user/base.html" %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12 ">
+                <a class="navbar-brand " href="{{ url_for('blog.home') }}">Home</a>
+                <h5 class="main-title text-center" style="font-family:sans-serif;">
+                    Hello {{ first_name }} this is your dashboard
+                </h5>
+            </div>
+        </div>
+
+        <!-- End row -->
+        <div class="row blog_list">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                <div class="card mb-3">
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <div class="blog_list ">
+
+                                <th>Post Image</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Actions</th>
+
+                            </div>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for post in user_posts %}
+                            <p hidden id="postId">{{ post.id }}</p>
+                            <div>
+                                <tr id="{{ post.id }}">
+                                    <td>
+                                        <div class="blog_list ">
+                                            <img class="d-none d-lg-block " alt="Post Image"
+
+                                                 src="{{ url_for('static', filename='images/posts_images/' + post.image) }}"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="blog_list ">
+
+                                            <a href="{{ url_for( 'blog.post', post_id=post.id) }}">
+                                                <h6>{{ post.title }}</h6></a>
+
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div class="blog_list ">
+                                            {{ post.categories[0]['children'] }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="actions ">
+                                            {% if post.status == true %}
+                                                <div class="form-check acivateBox">
+                                                    <input class="form-check-input active-btn" type="checkbox"
+                                                           value="{{ post.id }}" checked id="activeCheck">
+                                                    <label class="form-check-label" for="activeCheck">Active |
+                                                        Deactivate</label>
+                                                </div>
+                                            {% else %}
+                                                <div class="form-check acivateBox active-btn">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           value="{{ post.id }}" id="activeCheck">
+                                                    <label class="form-check-label" for="activeCheck">Active |
+                                                        Deactivate</label>
+                                                </div>
+                                            {% endif %}
+                                            <br>
+
+                                            <a href="{{ url_for( 'user.edit_post', post_id = post.id ) }}"
+                                               class="btn btn-primary btn-sm btn-block"><i class="far fa-edit"></i>
+                                                Edit</a>
+
+                                            <a class="btn btn-danger btn-sm btn-block delete-btn" value="{{ post.id }}"
+                                               style="background-color: #ff5d48"><i class="fas fa-trash"></i>Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </div>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block js %}
+        <script src="{{ url_for('static', filename='js/edit_post.js') }}"></script>
+    {% endblock %}
+
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "/blog/base.html" %} {% block title %}Quote{% endblock %} {% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand text-light" id="brand" href="{{ url_for('blog.home') }}">Quote</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+
+                {% for category in categories %} {% for key,value in category.items() %} {% if key == 'parent' %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link link-light dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ value }}
+                            </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for each in category['children'] %}
+                        <li><a class="dropdown-item" href="{{ url_for( 'blog.category', category_name = each ) }} ">{{ each }}</a>
+                        </li> {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}{% endfor %}{% endfor %}
+
+            </ul>
+
+            <!-- <form class="d-flex">
+                <input class="search form-control me-2" id="search" type="search" placeholder="Search" aria-label="Search" autocomplete="off">
+            </form> -->
+
+
+            {% if user %}
+            <div class="dropdown">
+                <a class="btn  dropdown" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="Avatar " alt="Avatar " src="{{ url_for('static', filename='images/profile_images/' + user.get('profile_image')) }}">
+                </a>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li>
+                        <p class="dropdown-header ">Signed in as <b>{{ user.get('first_name') }}</b></p>
+                    </li>
+                    <li><a class="dropdown-item " href="{{ url_for( 'user.posts_list') }} ">Dashboard</a></li>
+                    <li><a class="dropdown-item " href="{{ url_for( 'user.profile') }} ">Profile</a></li>
+                    <li><a class="dropdown-item " href="{{ url_for( 'user.create_post') }}">Write</a></li>
+                    <li>
+                        <hr class="dropdown-divider ">
+                    </li>
+                    <li><a class="dropdown-item text-danger " href="{{ url_for( 'blog.logout') }} ">Logout</a>
+                    </li>
+                </ul>
+            </div>
+
+            {% else %}
+
+            <div class="butts d-grid gap-2 d-md-block">
+                <a href="{{ url_for( 'blog.login') }} ">
+                    <button type="submit " class="btn btn-sm btn-outline-secondary signin">Sign in</button>
+                </a>
+
+                <a href="{{ url_for( 'blog.register') }} ">
+                    <button type="submit " class="btn btn-sm btn-outline-secondary ">Sign up</button>
+                </a>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</nav>
+
+{% endblock %} {% block TRENDING %}
+
+<div class="row mb-2 ">
+
+</div>{% endblock %} {% block content %}
+<div class="col-md-8 ">
+
+
+    <div id="content" class="row mb-2">
+        {% if posts %} {% for post in posts %} {% if post.status %}
+
+        <input class="titles" type="hidden" name="titles" value="{{ post.title }}">
+
+        <div class="col-md-12 ">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative ">
+                <div class="col p-4 d-flex flex-column position-static ">
+                    <h3 class="mb-0 ">{{ post.title | title }}</h3>
+                    <div class="mb-1 text-muted ">{{ post.pub_date.strftime("%d/%m/%Y %H:%M") }}</div>
+                    <p class="card-text mb-auto ">{{ post.content[0:300] | safe + "..." }}</p>
+                    <a href="{{ url_for( 'blog.post', post_id=post.id) }}" class="stretched-link ">Continue
+                                    reading</a>
+                </div>
+                <div class="col-auto d-none d-lg-block ">
+                    <img src="{{ url_for('static', filename='images/posts_images/' + post.image) }}" alt="post image" class="bd-placeholder-img">
+
+                </div>
+            </div>
+        </div>
+        {% endif %}{% endfor %} {% else %}
+
+        <h4> Oops! :( Sorry, we don't have a post in this category for now. </h4>
+
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %} {% block sidebar %}
+<div class="position-sticky " style="top: 2rem; ">
+    <div class="p-4 mb-3 bg-light rounded ">
+        <h5>About Us</h5>
+        <p class="mb-0 text"><b>Hello people of earth!</b> We are three friends learning how to develop a website using
+            <b>flask</b> framework on a bootcamp named MaktbSharif and this is our first project together as a team, Please let us know if you think of anyway to improve our site, and Make yourselves at home :D .
+        </p>
+    </div>
+
+    <div class="p-4">
+        <h5>TOPICS YOU MIGHT LIKE</h5>
+        <ol class="list-unstyled mb-0 row">
+            {% for tag in tags %}
+            <li class="col-3" id="{{ tag.id }}" onclick="post_by_tag(this.id)"><a href="#">{{ tag.name }}</a>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    <div class="p-4">
+        <h5>Contact Us</h5>
+        <ol class="list-unstyled ">
+            <li><a href="https://github.com/Saeedahmadi7714/quote ">GitHub</a></li>
+        </ol>
+    </div>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</div>
+{% endblock %} {% block footer %} {% endblock %}

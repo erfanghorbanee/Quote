@@ -1,0 +1,77 @@
+{% extends "/user/base.html" %} {% block title %} Sign Up {% endblock %} {% block content %}
+
+    <div class="wrapper">
+        <div class="inner">
+            <div class="image-holder">
+                <img src="static/images/register.png" alt="register">
+                <div style="display:flex;justify-content:center;">
+                    <span> Already have an account? <a href="{{ url_for('blog.login') }}"> Sign in </a></span>
+                </div>
+            </div>
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('blog.register') }}">
+
+                {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+                    <div class="alert alert-danger" role="alert" id="alert_msg">
+                        <h6>{{ messages[0][1] }}</h6>
+                    </div>
+                {% endif %} {% endwith %}
+                <h3>Create new account</h3>
+
+                <div class="form-group">
+
+                    <input type="text" required minlength="2" maxlength="50" name="first_name" placeholder="First Name"
+                           class="form-control">
+                    <input type="text" required name="last_name" minlength="2" maxlength="50" placeholder="Last Name"
+                           class="form-control">
+                </div>
+
+                <div class="form-wrapper">
+                    <label>
+                        <input type="text" name="user_name" required
+                               minlength="4" maxlength="50" placeholder="Username" class="form-control">
+                    </label>
+                    <i class="zmdi zmdi-account"></i>
+                </div>
+
+                <div class="form-wrapper">
+                    <label>
+                        <input type="text" maxlength="50" name="email" placeholder="Email Address"
+                               class="form-control">
+                    </label>
+                    <i class="zmdi zmdi-email"></i>
+                </div>
+
+                <div class="form-wrapper">
+                    <label>
+                        <input type="password" required name="password"
+                               minlength="8" maxlength="50" placeholder="Password" class="form-control">
+                    </label>
+                    <i class="zmdi zmdi-lock"></i>
+                </div>
+
+                <div class="form-wrapper">
+                    <label>
+                        <input type="text" required
+                               minlength="11" maxlength="11" name="phone_number" placeholder="Phone number"
+                               class="form-control">
+                    </label>
+                    <i class="zmdi zmdi-account"></i>
+                </div>
+
+                <div class="form-wrapper">
+                    <label class="custom-file-upload">
+                        <input type="file" name="profile_image" accept="image/*" class="form-control" required/>
+                        <i class="fa fa-cloud-upload"></i> Profile image
+                </div>
+
+                <button>Sign up
+                    <i class="zmdi zmdi-arrow-right"></i>
+                </button>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/user.js') }}"></script>
+{% endblock %}

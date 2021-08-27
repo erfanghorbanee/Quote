@@ -1,0 +1,59 @@
+{% extends "/blog/base.html" %} {% block title %}Edit{% endblock %} {% block banner %}{% endblock %} {% block css %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/create_post.css') }}"> {% endblock %} {% block content %}
+
+<form autocomplete="off" method="POST" enctype="multipart/form-data" action="{{ url_for( 'user.edit_post', post_id = post.id ) }}">
+    <div class="container">
+
+        <div class="wrapper">
+            <div class="title row g-3 align-items-center">
+                {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+                <div class="alert alert-danger" role="alert" id="alert_msg">
+                    <h6>{{ messages[0][1] }}</h6>
+                </div>
+                {% endif %} {% endwith %}
+                <div class="col-auto">
+                    <label for="title" class="col-form-label" name="label">Title</label>
+                </div>
+                <div class="col-auto">
+                    <input required name="title" type="text" id="title" value="{{ post.title }}" class="form-control">
+                </div>
+                <div class="col-auto">
+                    <span id="passwordHelpInline" class="form-text">
+                    Maximum 50 characters long.
+                  </span>
+                </div>
+            </div>
+
+            <textarea name="erfan" id="the-textarea" maxlength="5000" autofocus required>{{ post.content }}</textarea>
+            <div id="the-count">
+                <span id="current">0</span>
+                <span id="maximum">/ 5000</span>
+            </div>
+
+
+            <form autocomplete="off">
+                <div class="autocomplete" style="width:300px;">
+                    <input id="myInput" type="text" name="myCountry" placeholder="tag">
+                </div>
+                <button id="add" type="button" class="btn btn-sm text-light add" onclick="Add()">Add</button>
+
+                <div id="res" name="new_tag">
+                </div>
+
+                <input type="hidden" id="new_tag" name="new_tag">
+            </form>
+
+            <div class="butts d-grid gap-2 d-md-block">
+                <a href="{{ url_for( 'user.edit_post', post_id = post.id ) }}">
+                    <button type="submit " class="btn btn-sm text-light">Save</button>
+                </a>
+
+                <a class="cancel text-dark" href="{{ url_for( 'user.posts_list') }} ">Cancel</a>
+            </div>
+
+        </div>
+        <script src="{{ url_for('static', filename='js/create_post.js') }}"></script>
+    </div>
+</form>
+
+{% endblock %}

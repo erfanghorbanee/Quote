@@ -1,0 +1,27 @@
+.blog_list {
+    display: flex;
+    justify-content: center;
+}
+
+img {
+    height: 100px;
+    width: 100px;
+}
+
+.actions {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.acivateBox {
+    margin-top: 10px;
+}
+
+.btn {
+    font-size: 15px;
+}
+
+a {
+    text-decoration: none;
+}
