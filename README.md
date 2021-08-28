@@ -1,5 +1,6 @@
 # Quote
 
+A blog using Flask, MongoDB, and a little bit of JavaScript. You can post content or enjoy reading other people's content.
 
 ## Features
 
