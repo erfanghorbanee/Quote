@@ -18,7 +18,7 @@ A blog using Flask, MongoDB, and a little bit of JavaScript. You can post conten
 ##### Clone the repository :
 ```bash
 $ git clone https://github.com/erfanghorbanee/Quote.git
-$ cd quote
+$ cd Quote
 ```
 ##### Create a virtualenv and activate it:
  ```bash
