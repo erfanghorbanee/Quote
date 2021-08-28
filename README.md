@@ -16,7 +16,7 @@
 ## How install and run ?
 ##### Clone the repository :
 ```bash
-$ git clone https://github.com/Saeedahmadi7714/quote.git
+$ git clone https://github.com/erfanghorbanee/Quote.git
 $ cd quote
 ```
 ##### Create a virtualenv and activate it:
