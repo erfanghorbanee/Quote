@@ -1,5 +1,6 @@
-from mongoengine import Document, EmbeddedDocument, StringField, ReferenceField, ListField, DateTimeField, \
-    EmbeddedDocumentField, CASCADE, BooleanField
+from mongoengine import (CASCADE, BooleanField, DateTimeField, Document,
+                         EmbeddedDocument, EmbeddedDocumentField, ListField,
+                         ReferenceField, StringField)
 
 
 class User(Document):
@@ -14,7 +15,7 @@ class User(Document):
 
 class Post(Document):
     title = StringField(max_length=250, required=True)
-    author = ReferenceField('User', reverse_delete_rule=CASCADE)
+    author = ReferenceField("User", reverse_delete_rule=CASCADE)
     content = StringField(max_length=5000)
     categories = ListField()
     image = StringField(max_length=200)
@@ -25,20 +26,17 @@ class Post(Document):
     tags = ListField()
 
     meta = {
-        'auto_create_index': True,
-        'index_background': True,
-        'indexes': [{
-            'name': 'category',
-            'fields': ('categories',)
-        }, {
-            'name': 'tag',
-            'fields': ('tags',)
-        }]
+        "auto_create_index": True,
+        "index_background": True,
+        "indexes": [
+            {"name": "category", "fields": ("categories",)},
+            {"name": "tag", "fields": ("tags",)},
+        ],
     }
 
 
 class Comment(Document):
-    owner = ReferenceField('User', reverse_delete_rule=CASCADE)
+    owner = ReferenceField("User", reverse_delete_rule=CASCADE)
     text = StringField(max_length=250)
     created_date = DateTimeField()
 

@@ -1,24 +1,24 @@
 from random import randint
+
 from .database import get_db
 from .models import Post
-
 
 # Write your custom classes and functions here
 
 # Estimating post reading time
 def reading_time(content):
-    """"
+    """
     https://infusion.media/content-marketing/how-to-calculate-reading-time/
     """
     words = content.split()
     words = len(words)
     read_time = words / 200
-    spliced_read_time = str(read_time).split('.')
+    spliced_read_time = str(read_time).split(".")
 
     # If time has decimal places
     if spliced_read_time[1]:
 
-        extra_time = ((int(spliced_read_time[1]) / 1000) * .60) * 100
+        extra_time = ((int(spliced_read_time[1]) / 1000) * 0.60) * 100
 
         # If decimal places numbers smaller than 30 seconds return read_time without change and decimal places
         if extra_time < 30:
